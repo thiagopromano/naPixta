@@ -127,7 +127,7 @@ void drawSetasTopo(int frameNum)
 	drawSpriteAt(renderer, seta, x, y);
 }
 
-int main(int argc, char *argv[])
+void *graficos(void *t)
 {
 
 	int i, j, k, done;
