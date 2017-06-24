@@ -44,9 +44,9 @@ void showSplashScreen(void)
 SDL_Texture *setasTexture[9];
 Animation *setasAnimation[9];
 
-void handleKeyboard(int key, int down_or_up)
+void handleButton(int seta, int down_or_up)
 {
-
+	printf("%d" );
 	/* // down
 	 if(down_or_up) {
 	   switch(key)
@@ -240,12 +240,12 @@ void *graficos(void *t)
 
 				if (event.type == SDL_KEYDOWN)
 				{
-					handleKeyboard(event.key.keysym.sym, 1);
+					//handleKeyboard(event.key.keysym.sym, 1);
 				}
 
 				if (event.type == SDL_KEYUP)
 				{
-					handleKeyboard(event.key.keysym.sym, 0);
+					//handleKeyboard(event.key.keysym.sym, 0);
 				}
 			}
 		}
