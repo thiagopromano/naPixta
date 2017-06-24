@@ -125,7 +125,6 @@ void drawSpriteAt(SDL_Renderer *renderer, Sprite *sp, int x, int y)
 	SDL_RenderCopy(renderer, sp->texture, &sp->source, &_rect);
 }
 
-
 /* TMX
 SpriteTable *splitTextureTable(SDL_Texture *texture, int w, int h)
 {

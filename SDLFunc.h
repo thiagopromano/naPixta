@@ -1,5 +1,4 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+
 
 #include "common.c"
 #include "sprite.c"
@@ -46,7 +45,7 @@ Animation *setasAnimation[9];
 
 void handleButton(int seta, int down_or_up)
 {
-	printf("%d" );
+	printf("%d");
 	/* // down
 	 if(down_or_up) {
 	   switch(key)
@@ -93,35 +92,35 @@ void drawSetasTopo(int frameNum)
 
 	seta = getSpriteFromAnimation(setasAnimation[0], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
-	
+
 	x += X_SETAS_DISTANCIA;
 	seta = getSpriteFromAnimation(setasAnimation[3], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
-	
+
 	x += X_SETAS_DISTANCIA;
 	seta = getSpriteFromAnimation(setasAnimation[6], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
-	
+
 	x += X_SETAS_DISTANCIA;
 	seta = getSpriteFromAnimation(setasAnimation[7], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
-	
+
 	x += X_SETAS_DISTANCIA;
 	seta = getSpriteFromAnimation(setasAnimation[4], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
-	
+
 	x += X_SETAS_DISTANCIA;
 	seta = getSpriteFromAnimation(setasAnimation[1], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
-	
+
 	x += X_SETAS_DISTANCIA;
 	seta = getSpriteFromAnimation(setasAnimation[2], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
-	
+
 	x += X_SETAS_DISTANCIA;
 	seta = getSpriteFromAnimation(setasAnimation[5], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
-	
+
 	x += X_SETAS_DISTANCIA;
 	seta = getSpriteFromAnimation(setasAnimation[8], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
@@ -142,6 +141,10 @@ void *graficos(void *t)
 	// 		Load assets
 	// 		Mix_Chunk *chunk = Mix_LoadWAV("assets/swish-2.ogg");
 	TTF_Font *font = getFont("assets/yoster.ttf", 26);
+	if (Mix_PlayMusic(musicas[0].music, 1) == -1)
+	{
+		printf("Mix_PlayMusic: %s\n", Mix_GetError());
+	}
 	// 		SDL_Texture *groundTexture =
 	// getTexture("assets/ground.png");
 	setasTexture[0] = getTexture("assets/seta1.png");
@@ -240,12 +243,14 @@ void *graficos(void *t)
 
 				if (event.type == SDL_KEYDOWN)
 				{
-					//handleKeyboard(event.key.keysym.sym, 1);
+					// handleKeyboard(event.key.keysym.sym,
+					// 1);
 				}
 
 				if (event.type == SDL_KEYUP)
 				{
-					//handleKeyboard(event.key.keysym.sym, 0);
+					// handleKeyboard(event.key.keysym.sym,
+					// 0);
 				}
 			}
 		}

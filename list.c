@@ -8,8 +8,8 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST 1
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 void assert(int value)
 {

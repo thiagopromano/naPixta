@@ -8,18 +8,18 @@
 #ifndef GAME_LOOP_COMMON
 #define GAME_LOOP_COMMON 1
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "list.c"
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_audio.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 #define TICK_INTERVAL 16
 
@@ -29,6 +29,16 @@
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
+
+struct musica
+{
+	int step[250][9]; // 0 nada, 1 press, 2 long press start, 3 long press
+			  // continue
+	int qtdPassos;
+	float tempoPorPasso;
+	char nome[150];
+	Mix_Music *music;
+} musicas[5];
 
 // globals
 SDL_Window *window = NULL;
@@ -138,15 +148,34 @@ void init(void)
 
 	// Display available audio device
 	int count = SDL_GetNumAudioDevices(0), i;
+
+	fprintf(stderr, "Foram encontrados %d dispositivos de audio\n", count);
 	for (i = 0; i < count; ++i)
 	{
 		fprintf(stderr, "Audio device %d: %s\n", i,
 			SDL_GetAudioDeviceName(i, 0));
 	}
 
+	for (i = 0; i < SDL_GetNumAudioDrivers(); ++i)
+	{
+		const char *driver_name = SDL_GetAudioDriver(i);
+		if (SDL_AudioInit(driver_name))
+		{
+			printf("Audio driver failed to initialize: %s\n",
+			       driver_name);
+			continue;
+		}
+		fprintf(stderr, "Consegui com o %s\n", driver_name);
+		
+	}
+	/*for (i = 0; i < SDL_GetNumAudioDrivers(); ++i)
+	{
+		printf("Audio driver %d: %s\n", i, SDL_GetAudioDriver(i));
+	}*/
+
 	// init sound
 	int audio_rate = 22050;
-	Uint16 audio_format = AUDIO_S16SYS;
+	Uint16 audio_format = MIX_DEFAULT_FORMAT;
 	int nb_audio_channels = 4;
 	int audio_buffers = 4096;
 

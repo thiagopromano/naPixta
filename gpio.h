@@ -1,10 +1,10 @@
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <fcntl.h>
-#include <unistd.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define EXPORT 1
 #define UNEXPORT 0
