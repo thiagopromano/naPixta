@@ -5,9 +5,6 @@
 #include <pthread.h>
 #include <stdio.h>
 #define QTD_MUSICAS 5
-struct passo
-{
-};
 
 void readMusic(char *arquivo, int slot)
 {
@@ -21,7 +18,7 @@ void readMusic(char *arquivo, int slot)
 	}
 
 	sprintf(buf, "%s.mp3", arquivo);
-	musicas[slot].music = Mix_LoadMUS(buf);
+	strcpy(musicas[slot].musica, buf);
 	int linha = 0;
 	printf("lendo a linha %d", linha);
 	fgets(musicas[slot].nome, 150, pFile);
@@ -37,32 +34,33 @@ void readMusic(char *arquivo, int slot)
 			break;
 		}
 		printf("leu %d\n", temp);
-		// usleep(100000);
+		//usleep(100000);
 		if (temp == 0)
 		{
 
-			linha++;
-		}
-		else
-		{
+			linha++;		
 			int i;
 			// limpa o vetor step
 			for (i = 0; i < 9; i++)
 			{
 				musicas[slot].step[linha][i] = 0;
 			}
+		}
+		else
+		{
+			int i;
 			// long presss
 			if (temp < 10)
-				musicas[slot].step[linha][temp] = 1;
+				musicas[slot].step[linha][temp-1] = 1;
 			else
 			{
 				int duracao = temp / 10;
 				int seta = temp % 10;
-				musicas[slot].step[linha][seta] = 2;
+				musicas[slot].step[linha][seta-1] = 2;
 				int j;
 				for (j = 1; j <= duracao; j++)
 				{
-					musicas[slot].step[linha + j][seta] = 3;
+					musicas[slot].step[linha + j][seta-1] = 3;
 				}
 			}
 		}

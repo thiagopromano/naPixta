@@ -6,7 +6,7 @@
 #define X_SETAS_INICIAL 20
 #define Y_SETAS_INICIAL 50
 #define X_SETAS_DISTANCIA 85
-
+#define Y_SETAS_DISTANCIA 80
 void showSplashScreen(void)
 {
 
@@ -22,7 +22,7 @@ void showSplashScreen(void)
 	SDL_RendererInfo info;
 	SDL_GetRendererInfo(renderer, &info);
 
-	SDL_Delay(100);
+	// SDL_Delay(100);
 	int alpha = 1;
 	while (alpha < 255)
 	{
@@ -35,7 +35,7 @@ void showSplashScreen(void)
 		SDL_RenderCopy(renderer, splashTexture, NULL, &rect);
 		SDL_RenderPresent(renderer);
 
-		SDL_Delay(TICK_INTERVAL);
+		// SDL_Delay(TICK_INTERVAL);
 		alpha = alpha + 6;
 	}
 }
@@ -126,6 +126,92 @@ void drawSetasTopo(int frameNum)
 	drawSpriteAt(renderer, seta, x, y);
 }
 
+drawSetasGame(int frameNum, long int tempoMusica)
+{
+
+	//int x = X_SETAS_INICIAL;
+	int y = Y_SETAS_INICIAL;
+	float tempoPorPasso = musicas[musicaAtual].tempoPorPasso;
+
+	float passoAtual = (tempoMusica / 1000.0f) / tempoPorPasso;
+	//printf("TempoPorPasso %f\n", tempoPorPasso);
+	printf("estou no tempo %d\n", tempoMusica);
+	printf("estou no passo %f\n\n\n", passoAtual);
+	int i;
+
+	Sprite *setas[9];
+	for (i = 0; i < 9; i++)
+	{
+		setas[i] = getSpriteFromAnimation(setasAnimation[i], frameNum);
+	}
+	
+	for (i = passoAtual; i < passoAtual + 20; i++)
+	{
+		int x = X_SETAS_INICIAL;
+		if (musicas[musicaAtual].step[i][0])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[0], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+		
+		x += X_SETAS_DISTANCIA;
+		if (musicas[musicaAtual].step[i][3])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[3], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+
+		x += X_SETAS_DISTANCIA;
+		if (musicas[musicaAtual].step[i][6])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[6], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+
+		x += X_SETAS_DISTANCIA;
+		if (musicas[musicaAtual].step[i][7])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[7], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+
+		x += X_SETAS_DISTANCIA;
+		if (musicas[musicaAtual].step[i][4])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[4], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+
+		x += X_SETAS_DISTANCIA;
+		if (musicas[musicaAtual].step[i][1])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[1], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+
+		x += X_SETAS_DISTANCIA;
+		if (musicas[musicaAtual].step[i][2])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[2], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+
+		x += X_SETAS_DISTANCIA;
+		if (musicas[musicaAtual].step[i][5])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[5], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+
+		x += X_SETAS_DISTANCIA;
+		if (musicas[musicaAtual].step[i][8])
+		{
+			printf("step %d\n\n\n", i);
+			drawSpriteAt(renderer, setas[8], x, y + (i - passoAtual) * Y_SETAS_DISTANCIA);
+		}
+	}
+}
+
 void *graficos(void *t)
 {
 
@@ -141,10 +227,7 @@ void *graficos(void *t)
 	// 		Load assets
 	// 		Mix_Chunk *chunk = Mix_LoadWAV("assets/swish-2.ogg");
 	TTF_Font *font = getFont("assets/yoster.ttf", 26);
-	if (Mix_PlayMusic(musicas[0].music, 1) == -1)
-	{
-		printf("Mix_PlayMusic: %s\n", Mix_GetError());
-	}
+
 	// 		SDL_Texture *groundTexture =
 	// getTexture("assets/ground.png");
 	setasTexture[0] = getTexture("assets/seta1.png");
@@ -205,10 +288,16 @@ void *graficos(void *t)
 	int charx = viewport.w / 2;
 	int chary = viewport.h / 2;
 
+	char buf[150];
+	sprintf(buf, "mpg123 %s &", musicas[0].musica);
+	system(buf);
+
+	long int tempoInicial = SDL_GetTicks();
 	// The game loop
 	while (!done)
 	{
 
+		long int tempoMusica = SDL_GetTicks() - tempoInicial;
 		// slow down the physical stuff by being sure it runs
 		// only once every TICK_INTERVAL, or physical frame
 		if (SDL_GetTicks() / TICK_INTERVAL > frameNum)
@@ -270,8 +359,9 @@ void *graficos(void *t)
 		}*/
 
 		drawSetasTopo(frameNum);
+		drawSetasGame(frameNum, tempoMusica);
 		// do this every second on a physical frame
-		if (frameNum % framesBySecond == 0 && physical_frame)
+		/*if (frameNum % framesBySecond == 0 && physical_frame)
 		{
 
 			if (text_texture1)
@@ -296,7 +386,7 @@ void *graficos(void *t)
 			text_texture1 = renderFontToTexture(font, buffer);
 
 			renderedFrames = 0;
-		}
+		}*/
 
 		if (text_texture1)
 		{

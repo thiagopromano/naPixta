@@ -37,8 +37,10 @@ struct musica
 	int qtdPassos;
 	float tempoPorPasso;
 	char nome[150];
-	Mix_Music *music;
+	char musica[150];
 } musicas[5];
+
+int musicaAtual = 0;
 
 // globals
 SDL_Window *window = NULL;
@@ -85,7 +87,7 @@ static void quit(int rc)
 {
 
 	printf("Cleanup\n");
-
+	system("killall mpg123");
 	ListElement *el;
 
 	for (el = texturesList->first; el != NULL; el = el->next)
@@ -139,7 +141,7 @@ void init(void)
 	white.b = 255;
 
 	// Initialize SDL2
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		fprintf(stderr, "Unable to initialize SDL: %s \n",
 			SDL_GetError());
@@ -166,7 +168,6 @@ void init(void)
 			continue;
 		}
 		fprintf(stderr, "Consegui com o %s\n", driver_name);
-		
 	}
 	/*for (i = 0; i < SDL_GetNumAudioDrivers(); ++i)
 	{
