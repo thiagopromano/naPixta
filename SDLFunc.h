@@ -145,7 +145,7 @@ drawSetasGame(int frameNum, long int tempoMusica)
 		setas[i] = getSpriteFromAnimation(setasAnimation[i], frameNum);
 	}
 	
-	for (i = passoAtual; i < passoAtual + 20; i++)
+	for (i = MAX(0, passoAtual-1 ); i < passoAtual + 20; i++)
 	{
 		int x = X_SETAS_INICIAL;
 		if (musicas[musicaAtual].step[i][0])
