@@ -25,7 +25,6 @@
 
 // this seems necessary to do this: SDL_Texture->w
 // use SDL_QueryTexture(img, NULL, NULL, &w, &h); to get the size
-// #include "SDL2/SDL/src/render/SDL_sysrender.h"
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -203,12 +202,12 @@ void init(void)
 
 	// Create an application window with the following settings:
 	window = SDL_CreateWindow(
-	    "Game example",	  //    window title
-	    SDL_WINDOWPOS_UNDEFINED, //    initial x destination
-	    SDL_WINDOWPOS_UNDEFINED, //    initial y destination
-	    viewport.w,		     //    width, in pixels
-	    viewport.h,		     //    height, in pixels
-	    SDL_WINDOW_SHOWN	 //    flags
+	    "Game example",		  //    window title
+	    SDL_WINDOWPOS_UNDEFINED,      //    initial x destination
+	    SDL_WINDOWPOS_UNDEFINED,      //    initial y destination
+	    viewport.w,			  //    width, in pixels
+	    viewport.h,			  //    height, in pixels
+	    SDL_WINDOW_FULLSCREEN_DESKTOP //    flags
 	    );
 
 	// Check that the window was successfully made
