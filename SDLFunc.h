@@ -82,6 +82,8 @@ void showMenu(void)
 		rect.x = 100 + 5 * (viewport.w - 200) / 6 - w / 2;
 		
 		SDL_RenderCopy(renderer, setaMenu2, NULL, &rect);
+		
+		
 
 		SDL_RenderPresent(renderer);
 
@@ -106,6 +108,16 @@ void showMenu(void)
 					    event.key.keysym.sym - SDLK_KP_1;
 					if (simulated[seta] == 0)
 					{
+						if (seta == 5)
+						{
+							selecionado = (selecionado + 1) % QTD_MUSICAS;
+						}
+						else if (seta == 3)
+						{
+							selecionado = (selecionado + QTD_MUSICAS - 1) % QTD_MUSICAS;
+						}
+						
+						printf("selecionado = %d\n", selecionado);
 						printf("up %d\n", seta);
 					}
 				}

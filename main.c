@@ -4,7 +4,6 @@
 #include "gpio.h"
 #include <pthread.h>
 #include <stdio.h>
-#define QTD_MUSICAS 5
 
 void readMusic(char *arquivo, int slot)
 {
@@ -71,7 +70,13 @@ void readMusic(char *arquivo, int slot)
 	fclose(pFile);
 }
 
-void readMusics() { readMusic("musics/mortovivo", 0); }
+void readMusics() 
+{ 
+	readMusic("musics/enamore", 0);
+	readMusic("musics/mortovivo", 1);
+	readMusic("musics/gangnam", 2);
+	
+}
 
 void main()
 {

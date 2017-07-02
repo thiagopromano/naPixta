@@ -1,0 +1,7 @@
+enamore
+ritmo 0.2885
+duracao 225
+
+gangnam 
+ritmo 0.479
+duracao 222

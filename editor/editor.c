@@ -6,7 +6,7 @@
 
 float segundoAtual = 0;
 long long timestampInicial;
-int segundoImpresso = 0;
+int passoImpresso = 0;
 
 long long current_timestamp() {
     struct timeval te; 
@@ -39,14 +39,17 @@ int main()
     
     while(segundoAtual < duracao)
     {
-        if (segundoImpresso < segundoAtual-0.5)
+        segundoAtual = (current_timestamp() - timestampInicial) / 1000.0f;
+        
+        float passoAtual = segundoAtual/ritmo;
+        
+        if (passoImpresso < passoAtual- ritmo/2 && passoAtual > 1.6f)
         {
-            segundoImpresso++;
+            passoImpresso++;
             fprintf(fp, "0\n");
         }
-        segundoAtual = (current_timestamp() - timestampInicial) / 1000.0f;
         usleep(1000); // nao consumir toda a cpu
-        for(i = 0; i < 9; i++)
+        /*for(i = 0; i < 9; i++)
         {
             if (g_read(i))
             {
@@ -60,8 +63,17 @@ int main()
             {
                 estados[i] = 0;
             }
+        }*/
+        while(kbhit())
+        {
+            char entrada = getchar();
+            if (entrada > '0' && entrada <= '9')
+            {
+                fprintf(fp, "%c ", entrada);
+            }
         }
     }
+    fprintf(fp, "\n-1");
     system("killall mpg123");
     fclose(fp);
 }

@@ -22,6 +22,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #define TICK_INTERVAL 16
+#define QTD_MUSICAS 3
 
 // this seems necessary to do this: SDL_Texture->w
 // use SDL_QueryTexture(img, NULL, NULL, &w, &h); to get the size
@@ -31,8 +32,8 @@
 
 struct musica
 {
-	int step[250][9]; // 0 nada, 1 press, 2 long press start, 3 long press
-			  // continue
+	int step[1000][9]; // 0 nada, 1 press, 2 long press start, 3 long press
+			   // continue
 	int qtdPassos;
 	float tempoPorPasso;
 	char nome[150];
