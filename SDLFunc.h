@@ -15,6 +15,7 @@ int simulated[9] = {0};
 int score = 0;
 SDL_Texture *setasTexture[9];
 Animation *setasAnimation[9];
+int selecionado = 0;
 
 void showSplashScreen(void)
 {
@@ -31,7 +32,7 @@ void showSplashScreen(void)
 	SDL_RendererInfo info;
 	SDL_GetRendererInfo(renderer, &info);
 
-	 SDL_Delay(100);
+	SDL_Delay(100);
 	int alpha = 1;
 	while (alpha < 255)
 	{
@@ -48,8 +49,15 @@ void showSplashScreen(void)
 		alpha = alpha + 6;
 	}
 }
+void playSample(int sel)
+{
+	system("killall mpg123");
+	char buf[150];
+	sprintf(buf, "mpg123 -k 1000 %s &", musicas[sel].musica);
+	system(buf);
+}
 
-void showMenu(void)
+int showMenu(void)
 {
 	SDL_Event event;
 	SDL_Rect rect;
@@ -61,14 +69,15 @@ void showMenu(void)
 
 	SDL_Delay(100);
 	int alpha = 1;
-	int selecionado = 0;
+
 	int done = 0;
 	SDL_Texture *setaMenu = getTexture("assets/setaMenu.png");
 	SDL_Texture *setaMenu2 = getTexture("assets/setaMenu2.png");
-	
+
 	SDL_QueryTexture(setaMenu, NULL, NULL, &w, &h);
-	
+
 	int ySeta = viewport.h / 2 - h / 2;
+	playSample(selecionado);
 	while (!done)
 	{
 
@@ -78,12 +87,30 @@ void showMenu(void)
 		rect.w = w;
 		rect.h = h;
 		SDL_RenderCopy(renderer, setaMenu, NULL, &rect);
-		
+
 		rect.x = 100 + 5 * (viewport.w - 200) / 6 - w / 2;
-		
+
 		SDL_RenderCopy(renderer, setaMenu2, NULL, &rect);
-		
-		
+
+		if (text_texture1)
+		{
+			SDL_DestroyTexture(text_texture1);
+		}
+
+		char buffer[50];
+
+		sprintf(buffer, "%s", musicas[selecionado].nome);
+
+		text_texture1 = renderFontToTexture(font, buffer);
+
+		SDL_Rect text_rect;
+		int wtext, htext;
+		SDL_QueryTexture(text_texture1, NULL, NULL, &wtext, &htext);
+		text_rect.x = viewport.w / 2 - wtext / 2;
+		text_rect.y = viewport.h / 2 - htext / 2;
+		SDL_QueryTexture(text_texture1, NULL, NULL, &text_rect.w,
+				 &text_rect.h);
+		SDL_RenderCopy(renderer, text_texture1, NULL, &text_rect);
 
 		SDL_RenderPresent(renderer);
 
@@ -94,13 +121,13 @@ void showMenu(void)
 			if (event.type == SDL_QUIT ||
 			    event.type == SDL_WINDOWEVENT_CLOSE)
 			{
-				done = 1;
+				done = 2;
 			}
 
 			if (event.type == SDL_KEYDOWN)
 			{
 				if (event.key.keysym.sym == SDLK_ESCAPE)
-					done = 1;
+					done = 2;
 				if (event.key.keysym.sym - SDLK_KP_1 >= 0 &&
 				    event.key.keysym.sym - SDLK_KP_1 < 9)
 				{
@@ -110,20 +137,36 @@ void showMenu(void)
 					{
 						if (seta == 5)
 						{
-							selecionado = (selecionado + 1) % QTD_MUSICAS;
+							selecionado =
+							    (selecionado + 1) %
+							    QTD_MUSICAS;
+							playSample(selecionado);
 						}
 						else if (seta == 3)
 						{
-							selecionado = (selecionado + QTD_MUSICAS - 1) % QTD_MUSICAS;
+							selecionado =
+							    (selecionado +
+							     QTD_MUSICAS - 1) %
+							    QTD_MUSICAS;
+							playSample(selecionado);
 						}
-						
-						printf("selecionado = %d\n", selecionado);
+						else if (seta == 4)
+						{
+							done = 1;
+						}
+
+						printf("selecionado = %d\n",
+						       selecionado);
 						printf("up %d\n", seta);
 					}
 				}
 			}
 		}
 	}
+	system("killall mpg123");
+
+	musicaAtual = selecionado;
+	return done;
 }
 
 void handleButton(int seta, int down_or_up, long int tempoMusica)
@@ -308,42 +351,20 @@ void drawScore()
 	SDL_RenderCopy(renderer, text_texture1, NULL, &text_rect);
 }
 
-void *graficos(void *t)
+void game(void)
 {
-
-	int i, j, k, done;
+	
 	SDL_Event event;
+	SDL_SetRenderDrawColor(renderer, 0x70, 0xc8, 0x40, 0xff);
 
-	init();
-	X_SETAS_DISTANCIA = (viewport.w - X_SETAS_INICIAL * 2) / 9;
-	SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
-	SDL_RenderClear(renderer);
-	SDL_RenderPresent(renderer);
+	int charx = viewport.w / 2;
+	int chary = viewport.h / 2;
 
-	font = getFont("assets/yoster.ttf", 26);
-
-	setasTexture[0] = getTexture("assets/seta1.png");
-	setasTexture[1] = getTexture("assets/seta2.png");
-	setasTexture[2] = getTexture("assets/seta3.png");
-	setasTexture[3] = getTexture("assets/seta4.png");
-	setasTexture[4] = getTexture("assets/seta5.png");
-	setasTexture[5] = getTexture("assets/seta6.png");
-	setasTexture[6] = getTexture("assets/seta7.png");
-	setasTexture[7] = getTexture("assets/seta8.png");
-	setasTexture[8] = getTexture("assets/seta9.png");
-
-	SDL_Rect rect;
-	rect.x = 0;
-	rect.y = 0;
-	rect.w = 60;
-	rect.h = 60;
-
-	for (i = 0; i < 9; i++)
-		setasAnimation[i] =
-		    createAnimation(setasTexture[i], &rect, 30, 4);
-
-	done = 0;
-
+	char buf[150];
+	sprintf(buf, "mpg123 %s &", musicas[musicaAtual].musica);
+	system(buf);
+	
+	
 	// number of the current frame
 	int frameNum = SDL_GetTicks() / TICK_INTERVAL;
 	// amount of rendered frames
@@ -352,28 +373,13 @@ void *graficos(void *t)
 	// desired frames by second
 	int framesBySecond = 1000 / TICK_INTERVAL;
 
-	// indicate if the current frame is a "real" frame
-	int physical_frame = 1;
-
 	printf("Desired fps %d\n", framesBySecond);
 	printf("Start the game loop\n");
-
-	SDL_Delay(50);
-	showSplashScreen();
-	showMenu();
-
-	SDL_Delay(1000);
-	SDL_SetRenderDrawColor(renderer, 0x70, 0xc8, 0x40, 0xff);
-
-	int charx = viewport.w / 2;
-	int chary = viewport.h / 2;
-
-	char buf[150];
-	sprintf(buf, "mpg123 %s &", musicas[0].musica);
-	system(buf);
-
+	
 	long int tempoInicial = SDL_GetTicks();
-	// The game loop
+	
+	int done = 0;
+	
 	while (!done)
 	{
 
@@ -444,14 +450,55 @@ void *graficos(void *t)
 		SDL_RenderPresent(renderer);
 
 		// Cap to ~ 50 fps
-		if (draw_mode == 1)
-		{
-			capFramerate();
-		}
 
-		renderedFrames++;
+		capFramerate();
+		
+		frameNum++;
+
 	}
+}
 
+void *graficos(void *t)
+{
+
+	int i, j, k, done;
+
+	init();
+	X_SETAS_DISTANCIA = (viewport.w - X_SETAS_INICIAL * 2) / 9;
+	SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
+
+	font = getFont("assets/yoster.ttf", 26);
+
+	setasTexture[0] = getTexture("assets/seta1.png");
+	setasTexture[1] = getTexture("assets/seta2.png");
+	setasTexture[2] = getTexture("assets/seta3.png");
+	setasTexture[3] = getTexture("assets/seta4.png");
+	setasTexture[4] = getTexture("assets/seta5.png");
+	setasTexture[5] = getTexture("assets/seta6.png");
+	setasTexture[6] = getTexture("assets/seta7.png");
+	setasTexture[7] = getTexture("assets/seta8.png");
+	setasTexture[8] = getTexture("assets/seta9.png");
+
+	SDL_Rect rect;
+	rect.x = 0;
+	rect.y = 0;
+	rect.w = 60;
+	rect.h = 60;
+
+	for (i = 0; i < 9; i++)
+		setasAnimation[i] =
+		    createAnimation(setasTexture[i], &rect, 30, 4);
+
+	done = 0;
+
+
+	SDL_Delay(50);
+	showSplashScreen();
+	while (showMenu() == 1)
+		game();
+	
 	// cleanup
 	// TODO: free the structure that need to be
 

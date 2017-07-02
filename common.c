@@ -56,8 +56,6 @@ GenericList *fontList;
 SDL_Color black;
 SDL_Color white;
 
-// 0: full FPS, 1: cap the framerate
-int draw_mode = 1;
 static Uint32 next_time;
 
 inline int mod(a, b)

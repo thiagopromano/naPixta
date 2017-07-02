@@ -70,12 +70,11 @@ void readMusic(char *arquivo, int slot)
 	fclose(pFile);
 }
 
-void readMusics() 
-{ 
+void readMusics()
+{
 	readMusic("musics/enamore", 0);
 	readMusic("musics/mortovivo", 1);
 	readMusic("musics/gangnam", 2);
-	
 }
 
 void main()
