@@ -379,6 +379,7 @@ void game(void)
 	long int tempoInicial = SDL_GetTicks();
 	
 	int done = 0;
+	int score = 0;
 	
 	while (!done)
 	{
