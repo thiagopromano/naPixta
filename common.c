@@ -22,7 +22,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #define TICK_INTERVAL 16
-#define QTD_MUSICAS 3
+#define QTD_MUSICAS 4
 
 // this seems necessary to do this: SDL_Texture->w
 // use SDL_QueryTexture(img, NULL, NULL, &w, &h); to get the size

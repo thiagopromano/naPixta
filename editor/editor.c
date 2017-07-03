@@ -45,7 +45,7 @@ int main()
     fprintf(fp, "%s\n", vetor);
     fprintf(fp, "%f\n", duracao);
     fprintf(fp, "%f\n", ritmo);
-    system("mpg123 enamore.mp3 &");
+    system("mpg123 bumbumtamtam.mp3 &");
     timestampInicial = current_timestamp();
     
     while(segundoAtual < duracao)

@@ -5,3 +5,13 @@ duracao 225
 gangnam 
 ritmo 0.479
 duracao 222
+
+mortovivo
+ritmo 0.470
+duracao 155
+
+bumbumtamtam
+0.47
+duração 141
+
+Bum Bum Tam Tam

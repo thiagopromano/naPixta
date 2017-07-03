@@ -35,7 +35,7 @@ void readMusic(char *arquivo, int slot)
 		{
 			break;
 		}
-		printf("leu %d\n", temp);
+		//printf("leu %d\n", temp);
 		// usleep(100000);
 		if (temp == 0)
 		{
@@ -78,6 +78,7 @@ void readMusics()
 	readMusic("musics/enamore", 0);
 	readMusic("musics/mortovivo", 1);
 	readMusic("musics/gangnam", 2);
+	readMusic("musics/bumbumtamtam", 3);
 }
 
 void main()
@@ -90,9 +91,9 @@ void main()
 	readMusics();
 
 	status = pthread_create(&graficosThread, NULL, graficos, NULL);
-#ifdef PI
+
 	rpiThread = pthread_create(&rpiThread, NULL, rpi,NULL);
-#endif
+
 	if (status < 0)
 	{
 		perror("Deu ruim na thread de gráficos!");
@@ -100,8 +101,8 @@ void main()
 	}
 
 	while (1)
-	{
-		usleep(100000);
+	{//faz nada (vai dormi!)
+		usleep(10000000000);
 	}
 	return;
 }
