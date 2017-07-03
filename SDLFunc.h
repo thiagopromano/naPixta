@@ -351,7 +351,7 @@ void drawScore()
 	SDL_RenderCopy(renderer, text_texture1, NULL, &text_rect);
 }
 
-void game(void)
+int game(void)
 {
 	
 	SDL_Event event;
@@ -385,6 +385,11 @@ void game(void)
 	{
 
 		long int tempoMusica = SDL_GetTicks() - tempoInicial;
+		
+		if (tempoMusica/1000 > musicas[musicaAtual].duracao)
+		{
+			done = 1;
+		}
 
 		// Check for events
 		while (SDL_PollEvent(&event))
@@ -394,13 +399,13 @@ void game(void)
 			if (event.type == SDL_QUIT ||
 			    event.type == SDL_WINDOWEVENT_CLOSE)
 			{
-				done = 1;
+				done = 2;
 			}
 
 			if (event.type == SDL_KEYDOWN)
 			{
 				if (event.key.keysym.sym == SDLK_ESCAPE)
-					done = 1;
+					done = 2;
 				if (event.key.keysym.sym - SDLK_KP_1 >= 0 &&
 				    event.key.keysym.sym - SDLK_KP_1 < 9)
 				{
@@ -457,6 +462,10 @@ void game(void)
 		frameNum++;
 
 	}
+	if (done == 1)
+		return score;
+	else
+		return -1;
 }
 
 void *graficos(void *t)

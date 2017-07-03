@@ -21,6 +21,7 @@ void readMusic(char *arquivo, int slot)
 	int linha = 0;
 	printf("lendo a linha %d", linha);
 	fgets(musicas[slot].nome, 150, pFile);
+	fscanf(pFile, "%f", &musicas[slot].duracao);
 	fscanf(pFile, "%f", &musicas[slot].tempoPorPasso);
 	while (1)
 	{

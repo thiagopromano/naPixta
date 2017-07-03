@@ -22,9 +22,17 @@ int main()
 {
     float ritmo;
     float duracao;
-    printf ("diga o ritmo em segundos");
+    char vetor[50];
+	printf("Diga o nome da musica: ");
+	/*char c;
+	while ((c = getchar()) != '\n' && c != EOF)
+	{
+	}*/
+	gets(vetor);
+	
+    printf ("diga o ritmo em segundos\n");
     scanf("%f", &ritmo);
-    printf ("diga a duracao em segundos");
+    printf ("diga a duracao em segundos\n");
     scanf("%f", &duracao);
     int i;
     for (i = 0; i < 9; i++)
@@ -33,6 +41,9 @@ int main()
         g_modo(pinos[i], INPUT);
     }
     FILE *fp = fopen("musica.pix", "w");
+    
+    fprintf(fp, "%s\n", vetor);
+    fprintf(fp, "%f\n", duracao);
     fprintf(fp, "%f\n", ritmo);
     system("mpg123 mortovivo.mp3 &");
     timestampInicial = current_timestamp();

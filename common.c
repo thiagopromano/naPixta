@@ -38,6 +38,7 @@ struct musica
 	float tempoPorPasso;
 	char nome[150];
 	char musica[150];
+	float duracao;//segundos
 } musicas[5];
 
 int musicaAtual = 0;
