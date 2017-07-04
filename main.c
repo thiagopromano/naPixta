@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <stdio.h>
 
+
 void readMusic(char *arquivo, int slot)
 {
 	FILE *pFile;
@@ -21,6 +22,7 @@ void readMusic(char *arquivo, int slot)
 	int linha = 0;
 	printf("lendo a linha %d", linha);
 	fgets(musicas[slot].nome, 150, pFile);
+	musicas[slot].nome[strcspn(musicas[slot].nome, "\n")] = 0;
 	fscanf(pFile, "%f", &musicas[slot].duracao);
 	fscanf(pFile, "%f", &musicas[slot].tempoPorPasso);
 	while (1)

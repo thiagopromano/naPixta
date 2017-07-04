@@ -17,6 +17,9 @@ SDL_Texture *setasTexture[9];
 Animation *setasAnimation[9];
 int selecionado = 0;
 
+
+struct musica atual;
+
 void showSplashScreen(void)
 {
 
@@ -164,8 +167,7 @@ int showMenu(void)
 		}
 	}
 	system("killall mpg123");
-
-	musicaAtual = selecionado;
+	atual = musicas[selecionado];
 	return done;
 }
 
@@ -174,16 +176,16 @@ void handleButton(int seta, int down_or_up, long int tempoMusica)
 	// down
 	if (down_or_up == 1)
 	{
-		float tempoPorPasso = musicas[musicaAtual].tempoPorPasso;
+		float tempoPorPasso = atual.tempoPorPasso;
 
 		float passoAtual = (tempoMusica / 1000.0f) / tempoPorPasso;
 
 		int iPasso = round(passoAtual);
 		float diferenca = fabs(passoAtual - iPasso);
 		if (diferenca < 0.3 &&
-		    musicas[musicaAtual].step[iPasso][seta] != 0)
+		    atual.step[iPasso][seta] != 0)
 		{
-			musicas[musicaAtual].step[iPasso][seta] = 0;
+			atual.step[iPasso][seta] = 0;
 
 			if (diferenca < 0.1)
 				score += 200;
@@ -250,7 +252,7 @@ drawSetasGame(int frameNum, long int tempoMusica)
 
 	// int x = X_SETAS_INICIAL;
 	int y = Y_SETAS_INICIAL;
-	float tempoPorPasso = musicas[musicaAtual].tempoPorPasso;
+	float tempoPorPasso = atual.tempoPorPasso;
 
 	float passoAtual = (tempoMusica / 1000.0f) / tempoPorPasso;
 	// printf("TempoPorPasso %f\n", tempoPorPasso);
@@ -267,63 +269,63 @@ drawSetasGame(int frameNum, long int tempoMusica)
 	for (i = MAX(0, passoAtual - 1); i < passoAtual + 20; i++)
 	{
 		int x = X_SETAS_INICIAL;
-		if (musicas[musicaAtual].step[i][0])
+		if (atual.step[i][0])
 		{
 			drawSpriteAt(renderer, setas[0], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
 		}
 
 		x += X_SETAS_DISTANCIA;
-		if (musicas[musicaAtual].step[i][3])
+		if (atual.step[i][3])
 		{
 			drawSpriteAt(renderer, setas[3], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
 		}
 
 		x += X_SETAS_DISTANCIA;
-		if (musicas[musicaAtual].step[i][6])
+		if (atual.step[i][6])
 		{
 			drawSpriteAt(renderer, setas[6], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
 		}
 
 		x += X_SETAS_DISTANCIA;
-		if (musicas[musicaAtual].step[i][7])
+		if (atual.step[i][7])
 		{
 			drawSpriteAt(renderer, setas[7], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
 		}
 
 		x += X_SETAS_DISTANCIA;
-		if (musicas[musicaAtual].step[i][4])
+		if (atual.step[i][4])
 		{
 			drawSpriteAt(renderer, setas[4], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
 		}
 
 		x += X_SETAS_DISTANCIA;
-		if (musicas[musicaAtual].step[i][1])
+		if (atual.step[i][1])
 		{
 			drawSpriteAt(renderer, setas[1], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
 		}
 
 		x += X_SETAS_DISTANCIA;
-		if (musicas[musicaAtual].step[i][2])
+		if (atual.step[i][2])
 		{
 			drawSpriteAt(renderer, setas[2], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
 		}
 
 		x += X_SETAS_DISTANCIA;
-		if (musicas[musicaAtual].step[i][5])
+		if (atual.step[i][5])
 		{
 			drawSpriteAt(renderer, setas[5], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
 		}
 
 		x += X_SETAS_DISTANCIA;
-		if (musicas[musicaAtual].step[i][8])
+		if (atual.step[i][8])
 		{
 			drawSpriteAt(renderer, setas[8], x,
 				     y + (i - passoAtual) * Y_SETAS_DISTANCIA);
@@ -361,7 +363,7 @@ int game(void)
 	int chary = viewport.h / 2;
 
 	char buf[150];
-	sprintf(buf, "mpg123 %s &", musicas[musicaAtual].musica);
+	sprintf(buf, "mpg123 %s &", atual.musica);
 	system(buf);
 	
 	
@@ -386,7 +388,7 @@ int game(void)
 
 		long int tempoMusica = SDL_GetTicks() - tempoInicial;
 		
-		if (tempoMusica/1000 > musicas[musicaAtual].duracao)
+		if (tempoMusica/1000 > atual.duracao)
 		{
 			done = 1;
 		}
