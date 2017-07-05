@@ -1,9 +1,9 @@
 // atencao, pulseaudio deve estar rodando!
 
 #include "SDLFunc.h"
-#include "gpio.h"
 #include <pthread.h>
 #include <stdio.h>
+#include "rpi.c"
 
 
 void readMusic(char *arquivo, int slot)
@@ -85,11 +85,14 @@ void main()
 
 	int status = 0;
 	pthread_t graficosThread;
+	pthread_t rpiThread;
 
 	readMusics();
 
 	status = pthread_create(&graficosThread, NULL, graficos, NULL);
-
+#ifdef PI
+	rpiThread = pthread_create(&rpiThread, NULL, rpi,NULL);
+#endif
 	if (status < 0)
 	{
 		perror("Deu ruim na thread de gráficos!");

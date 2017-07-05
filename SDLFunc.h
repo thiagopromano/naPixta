@@ -2,7 +2,6 @@
 
 #include "common.c"
 #include "sprite.c"
-
 #define X_SETAS_INICIAL 20
 #define Y_SETAS_INICIAL 50
 int X_SETAS_DISTANCIA = 85;
