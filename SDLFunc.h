@@ -12,8 +12,8 @@ TTF_Font *font;
 int simulated[9] = {0};
 
 int score = 0;
-SDL_Texture *setasTexture[9];
-Animation *setasAnimation[9];
+SDL_Texture *setasTexture[18];
+Animation *setasAnimation[18];
 int selecionado = 0;
 
 
@@ -23,13 +23,13 @@ void showSplashScreen(void)
 {
 
 	SDL_Rect rect;
-	SDL_Texture *splashTexture = getTexture("assets/splash.png");
+	SDL_Texture *splashTexture = getTexture("assets/pixta.jpg");
 	int w, h;
 	SDL_QueryTexture(splashTexture, NULL, NULL, &w, &h);
-	rect.w = w;
-	rect.h = h;
-	rect.x = viewport.w / 2 - w / 2;
-	rect.y = viewport.h / 2 - h / 2;
+	rect.w = viewport.w;
+	rect.h = viewport.h;
+	rect.x = 0;
+	rect.y = 0;
 
 	SDL_RendererInfo info;
 	SDL_GetRendererInfo(renderer, &info);
@@ -47,10 +47,11 @@ void showSplashScreen(void)
 		SDL_RenderCopy(renderer, splashTexture, NULL, &rect);
 		SDL_RenderPresent(renderer);
 
-		// SDL_Delay(TICK_INTERVAL);
+		SDL_Delay(TICK_INTERVAL);
 		alpha = alpha + 6;
 	}
 }
+
 void playSample(int sel)
 {
 	system("killall mpg123");
@@ -73,8 +74,8 @@ int showMenu(void)
 	int alpha = 1;
 
 	int done = 0;
-	SDL_Texture *setaMenu = getTexture("assets/setaMenu.png");
-	SDL_Texture *setaMenu2 = getTexture("assets/setaMenu2.png");
+	SDL_Texture *setaMenu = getTexture("assets/Setas/Normal_Left.png");
+	SDL_Texture *setaMenu2 = getTexture("assets/Setas/Normal_Right.png");
 
 	SDL_QueryTexture(setaMenu, NULL, NULL, &w, &h);
 
@@ -210,39 +211,39 @@ void drawSetasTopo(int frameNum)
 
 	Sprite *seta;
 
-	seta = getSpriteFromAnimation(setasAnimation[0], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[9], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 
 	x += X_SETAS_DISTANCIA;
-	seta = getSpriteFromAnimation(setasAnimation[3], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[12], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 
 	x += X_SETAS_DISTANCIA;
-	seta = getSpriteFromAnimation(setasAnimation[6], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[15], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 
 	x += X_SETAS_DISTANCIA;
-	seta = getSpriteFromAnimation(setasAnimation[7], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[16], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 
 	x += X_SETAS_DISTANCIA;
-	seta = getSpriteFromAnimation(setasAnimation[4], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[13], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 
 	x += X_SETAS_DISTANCIA;
-	seta = getSpriteFromAnimation(setasAnimation[1], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[10], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 
 	x += X_SETAS_DISTANCIA;
-	seta = getSpriteFromAnimation(setasAnimation[2], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[11], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 
 	x += X_SETAS_DISTANCIA;
-	seta = getSpriteFromAnimation(setasAnimation[5], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[14], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 
 	x += X_SETAS_DISTANCIA;
-	seta = getSpriteFromAnimation(setasAnimation[8], frameNum);
+	seta = getSpriteFromAnimation(setasAnimation[17], frameNum);
 	drawSpriteAt(renderer, seta, x, y);
 }
 
@@ -356,7 +357,17 @@ int game(void)
 {
 	
 	SDL_Event event;
-	SDL_SetRenderDrawColor(renderer, 0x70, 0xc8, 0x40, 0xff);
+	// SDL_SetRenderDrawColor(renderer, 0x70, 0xc8, 0x40, 0xff);
+	
+	SDL_Rect rect;
+	SDL_Texture *splashTexture = getTexture("assets/bg-pixta.jpg");
+	int w, h;
+	SDL_QueryTexture(splashTexture, NULL, NULL, &w, &h);
+	rect.w = viewport.w;
+	rect.h = viewport.h;
+	rect.x = 0;
+	rect.y = 0;
+	
 
 	int charx = viewport.w / 2;
 	int chary = viewport.h / 2;
@@ -446,7 +457,7 @@ int game(void)
 
 		// this is not free
 		SDL_RenderClear(renderer);
-
+		SDL_RenderCopy(renderer, splashTexture, NULL, &rect);
 		drawSetasTopo(frameNum);
 		drawSetasGame(frameNum, tempoMusica);
 
@@ -482,25 +493,36 @@ void *graficos(void *t)
 
 	font = getFont("assets/yoster.ttf", 26);
 
-	setasTexture[0] = getTexture("assets/seta1.png");
-	setasTexture[1] = getTexture("assets/seta2.png");
-	setasTexture[2] = getTexture("assets/seta3.png");
-	setasTexture[3] = getTexture("assets/seta4.png");
-	setasTexture[4] = getTexture("assets/seta5.png");
-	setasTexture[5] = getTexture("assets/seta6.png");
-	setasTexture[6] = getTexture("assets/seta7.png");
-	setasTexture[7] = getTexture("assets/seta8.png");
-	setasTexture[8] = getTexture("assets/seta9.png");
+	setasTexture[0] = getTexture("assets/Setas/Normal_Dig_Left_Down.png");
+	setasTexture[1] = getTexture("assets/Setas/Normal_Down.png");
+	setasTexture[2] = getTexture("assets/Setas/Normal_Dig_Right_Down.png");
+	setasTexture[3] = getTexture("assets/Setas/Normal_Left.png");
+	setasTexture[4] = getTexture("assets/Setas/Normal_Middle.png");
+	setasTexture[5] = getTexture("assets/Setas/Normal_Right.png");
+	setasTexture[6] = getTexture("assets/Setas/Normal_Dig_Left_Up.png");
+	setasTexture[7] = getTexture("assets/Setas/Normal_Up.png");
+	setasTexture[8] = getTexture("assets/Setas/Normal_Dig_Right_Up.png");	
+	
+	 setasTexture[9] = getTexture("assets/Setas/Gray_Dig_Left_Down.png");
+	setasTexture[10] = getTexture("assets/Setas/Gray_Down.png");
+	setasTexture[11] = getTexture("assets/Setas/Gray_Dig_Right_Down.png");
+	setasTexture[12] = getTexture("assets/Setas/Gray_Left.png");
+	setasTexture[13] = getTexture("assets/Setas/Gray_Middle.png");
+	setasTexture[14] = getTexture("assets/Setas/Gray_Right.png");
+	setasTexture[15] = getTexture("assets/Setas/Gray_Dig_Left_Up.png");
+	setasTexture[16] = getTexture("assets/Setas/Gray_Up.png");
+	setasTexture[17] = getTexture("assets/Setas/Gray_Dig_Right_Up.png");
+	
 
 	SDL_Rect rect;
 	rect.x = 0;
 	rect.y = 0;
-	rect.w = 60;
-	rect.h = 60;
+	rect.w = 64;
+	rect.h = 64;
 
-	for (i = 0; i < 9; i++)
+	for (i = 0; i < 18; i++)
 		setasAnimation[i] =
-		    createAnimation(setasTexture[i], &rect, 30, 4);
+		    createAnimation(setasTexture[i], &rect, 64, 1);
 
 	done = 0;
 
